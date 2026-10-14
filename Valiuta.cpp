@@ -19,6 +19,8 @@ const double INR_Parduoti = 107.8546;
 int main() {
     int veiksmas;
 
+    cout << fixed << setprecision(2);
+
     do {
         cout << "\n Keitykla \n";
         cout << "1  Valiutos kursas  \n";
@@ -42,14 +44,51 @@ int main() {
         cin >> valiuta;
 
         string kodas;
+        double bendras = 0, pirkti = 0, parduoti = 0;
+
         switch (valiuta) {
-            case 1: kodas = "GBP"; ;
-            case 2: kodas = "USD"; ;
-            case 3: kodas = "INR"; ;
+            case 1:
+                kodas = "GBP"; bendras = GBP_Bendras; pirkti = GBP_Pirkti; parduoti = GBP_Parduoti;
+                break;
+            case 2:
+                kodas = "USD"; bendras = USD_Bendras; pirkti = USD_Pirkti; parduoti = USD_Parduoti;
+                break;
+            case 3:
+                kodas = "INR"; bendras = INR_Bendras; pirkti = INR_Pirkti; parduoti = INR_Parduoti;
+                break;
         }
 
-        cout << "Pasirinkta valiuta: " << kodas << "\n";
-        cout << "Veikia \n";
+        if (veiksmas == 1) {
+            cout << "\n   " << kodas << " kursai euro atzvilgiu    \n";
+            cout << setprecision(4);
+            cout << "Bendras kursas:   1 EUR = " << bendras  << " " << kodas << "\n";
+            cout << "Pirkimo kursas:   1 EUR = " << pirkti   << " " << kodas << "\n";
+            cout << "Pardavimo kursas: 1 EUR = " << parduoti << " " << kodas << "\n";
+            cout << setprecision(2);
+            cout << "Parduodant 1 " << kodas << " gaunas " << 1 / parduoti << " EUR\n";
+        }
+        else if (veiksmas == 2) {
+            double suma;
+            cout << "Iveskiti suma ,  ";
+            cin >> suma;
+
+            double gaunama = suma * pirkti;
+            cout << "\n    Pirkimas    \n";
+            cout << "Moketi:   " << suma << " EUR\n";
+            cout << "Valiuta:  " << kodas << "\n";
+            cout << "Gaunti:  " << gaunama << " " << kodas << "\n";
+        }
+        else if (veiksmas == 3) {
+            double suma;
+            cout << "Ivesti" << kodas << " suma, kuria parduoti: ";
+            cin >> suma;
+
+            double gaunama = suma / parduoti;
+            cout << "\n    Pardavimas    \n";
+            cout << "Parduoduoti: " << suma << " " << kodas << "\n";
+            cout << "Valiuta:    " << kodas << "\n";
+            cout << "Gaunti:    " << gaunama << " EUR\n";
+        }
 
     } while (true);
 
