@@ -17,6 +17,19 @@ int ivestiPazymi() {
     return pazymys;
 }
 
+int ivestiNumeri(string kas, int kiekis) {
+    int nr;
+    do {
+        cout << "Iveskite " << kas << " numeri (0 - grizti i meniu): ";
+        cin >> nr;
+        if (nr == 0)
+            return 0;
+        if (nr < 1 || nr > kiekis)
+            cout << "Neteisingas " << kas << " numeris. Iveskite skaiciu nuo 1 iki " << kiekis << ".\n";
+    } while (nr < 1 || nr > kiekis);
+    return nr;
+}
+
 int main() {
     string vardai[MAX_MOKINIU];
     int pazymiai[MAX_MOKINIU][MAX_PAZYMIU];
@@ -71,9 +84,57 @@ int main() {
                 }
                 break;
             }
-            case 3:
-            case 4:
-            case 5:
+            case 3: {
+                int nr = ivestiNumeri("mokinio", mokiniuSk);
+                if (nr == 0)
+                    break;
+                int i = nr - 1;
+                cout << vardai[i] << ": ";
+                if (pazymiuSk[i] == 0)
+                    cout << "pazymiu nera";
+                for (int j = 0; j < pazymiuSk[i]; j++)
+                    cout << pazymiai[i][j] << " ";
+                cout << "\n";
+                break;
+            }
+            case 4: {
+                int nr = ivestiNumeri("mokinio", mokiniuSk);
+                if (nr == 0)
+                    break;
+                int i = nr - 1;
+                if (pazymiuSk[i] == 0) {
+                    cout << "Mokinys " << vardai[i] << " pazymiu neturi.\n";
+                    break;
+                }
+                cout << vardai[i] << " pazymiai: ";
+                for (int j = 0; j < pazymiuSk[i]; j++)
+                    cout << (j + 1) << ") " << pazymiai[i][j] << "  ";
+                cout << "\n";
+
+                int pnr = ivestiNumeri("pazymio", pazymiuSk[i]);
+                if (pnr == 0)
+                    break;
+                cout << "Iveskite nauja pazymi: ";
+                pazymiai[i][pnr - 1] = ivestiPazymi();
+                cout << "Pazymys atnaujintas.\n";
+                break;
+            }
+            case 5: {
+                int nr = ivestiNumeri("mokinio", mokiniuSk);
+                if (nr == 0)
+                    break;
+                int i = nr - 1;
+                if (pazymiuSk[i] == 0) {
+                    cout << "Mokinys " << vardai[i] << " pazymiu neturi, vidurkio apskaiciuoti negalima.\n";
+                    break;
+                }
+                int suma = 0;
+                for (int j = 0; j < pazymiuSk[i]; j++)
+                    suma += pazymiai[i][j];
+                double vidurkis = (double)suma / pazymiuSk[i];
+                cout << vardai[i] << " vidurkis: " << vidurkis << "\n";
+                break;
+            }
             case 6:
                 cout << "Si funkcija dar neparuosta.\n";
                 break;
