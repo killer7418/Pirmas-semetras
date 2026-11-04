@@ -1,0 +1,90 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+
+using namespace std;
+
+const int MAX_MOKINIU = 100;
+const int MAX_PAZYMIU = 10;
+
+int ivestiPazymi() {
+    int pazymys;
+    do {
+        cin >> pazymys;
+        if (pazymys < 1 || pazymys > 10)
+            cout << "Neteisingas pazymys. Iveskite skaiciu nuo 1 iki 10: ";
+    } while (pazymys < 1 || pazymys > 10);
+    return pazymys;
+}
+
+int main() {
+    string vardai[MAX_MOKINIU];
+    int pazymiai[MAX_MOKINIU][MAX_PAZYMIU];
+    int pazymiuSk[MAX_MOKINIU];
+    int mokiniuSk = 0;
+    int pasirinkimas;
+
+    cout << fixed << setprecision(2);
+
+    do {
+        cout << "\n===== MOKINIU PAZYMIU SISTEMA =====\n";
+        cout << "1. Ivesti mokini ir jo pazymius\n";
+        cout << "2. Perziureti visu mokiniu pazymius\n";
+        cout << "3. Perziureti konkretaus mokinio pazymius\n";
+        cout << "4. Atnaujinti pazymi\n";
+        cout << "5. Apskaiciuoti mokinio vidurki\n";
+        cout << "6. Pasalinti mokini\n";
+        cout << "7. Iseiti\n";
+        cout << "Pasirinkite: ";
+        cin >> pasirinkimas;
+
+        switch (pasirinkimas) {
+            case 1: {
+                cout << "Iveskite mokinio varda: ";
+                cin >> vardai[mokiniuSk];
+
+                int kiek;
+                cout << "Kiek pazymiu ivesite (0-" << MAX_PAZYMIU << ")? ";
+                cin >> kiek;
+                while (kiek < 0 || kiek > MAX_PAZYMIU) {
+                    cout << "Neteisingas kiekis. Iveskite skaiciu nuo 0 iki " << MAX_PAZYMIU << ": ";
+                    cin >> kiek;
+                }
+
+                for (int j = 0; j < kiek; j++) {
+                    cout << (j + 1) << " pazymys: ";
+                    pazymiai[mokiniuSk][j] = ivestiPazymi();
+                }
+                pazymiuSk[mokiniuSk] = kiek;
+                mokiniuSk++;
+                cout << "Mokinys pridetas.\n";
+                break;
+            }
+            case 2: {
+                for (int i = 0; i < mokiniuSk; i++) {
+                    cout << (i + 1) << ". " << vardai[i] << ": ";
+                    if (pazymiuSk[i] == 0)
+                        cout << "pazymiu nera";
+                    for (int j = 0; j < pazymiuSk[i]; j++)
+                        cout << pazymiai[i][j] << " ";
+                    cout << "\n";
+                }
+                break;
+            }
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+                cout << "Si funkcija dar neparuosta.\n";
+                break;
+            case 7:
+                cout << "Programa baigta.\n";
+                break;
+            default:
+                cout << "Neteisingas pasirinkimas. Iveskite skaiciu nuo 1 iki 7.\n";
+        }
+
+    } while (pasirinkimas != 7);
+
+    return 0;
+}
