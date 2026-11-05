@@ -51,8 +51,17 @@ int main() {
         cout << "Pasirinkite: ";
         cin >> pasirinkimas;
 
+        if (pasirinkimas >= 2 && pasirinkimas <= 6 && mokiniuSk == 0) {
+            cout << "Sarase nera mokiniu.\n";
+            continue;
+        }
+
         switch (pasirinkimas) {
             case 1: {
+                if (mokiniuSk >= MAX_MOKINIU) {
+                    cout << "Pasiektas mokiniu limitas (" << MAX_MOKINIU << ").\n";
+                    break;
+                }
                 cout << "Iveskite mokinio varda: ";
                 cin >> vardai[mokiniuSk];
 
@@ -135,9 +144,21 @@ int main() {
                 cout << vardai[i] << " vidurkis: " << vidurkis << "\n";
                 break;
             }
-            case 6:
-                cout << "Si funkcija dar neparuosta.\n";
+            case 6: {
+                int nr = ivestiNumeri("mokinio", mokiniuSk);
+                if (nr == 0)
+                    break;
+                int i = nr - 1;
+                cout << "Mokinys " << vardai[i] << " pasalintas.\n";
+                for (int k = i; k < mokiniuSk - 1; k++) {
+                    vardai[k] = vardai[k + 1];
+                    pazymiuSk[k] = pazymiuSk[k + 1];
+                    for (int j = 0; j < MAX_PAZYMIU; j++)
+                        pazymiai[k][j] = pazymiai[k + 1][j];
+                }
+                mokiniuSk--;
                 break;
+            }
             case 7:
                 cout << "Programa baigta.\n";
                 break;
