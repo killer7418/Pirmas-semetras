@@ -74,6 +74,31 @@ double nuolaida(double suma, int kiekis) {
     return 0;
 }
 
+double kategorijosSuma(string kategorijos[], double kainos[], int kiekiai[], int n, string kategorija) {
+    double suma = 0;
+    for (int i = 0; i < n; i++) {
+        if (kategorijos[i] == kategorija) {
+            double s = eilutesSuma(kainos[i], kiekiai[i]);
+            suma += s - nuolaida(s, kiekiai[i]);
+        }
+    }
+    return suma;
+}
+
+double visoSumaPries(double kainos[], int kiekiai[], int n) {
+    double suma = 0;
+    for (int i = 0; i < n; i++)
+        suma += eilutesSuma(kainos[i], kiekiai[i]);
+    return suma;
+}
+
+double visoNuolaidos(double kainos[], int kiekiai[], int n) {
+    double suma = 0;
+    for (int i = 0; i < n; i++)
+        suma += nuolaida(eilutesSuma(kainos[i], kiekiai[i]), kiekiai[i]);
+    return suma;
+}
+
 void spausdintiLentele(ostream &out, string kategorijos[], string pavadinimai[],
                        double kainos[], int kiekiai[], int n, string filtras) {
     out << left << setw(12) << "Kategorija" << setw(47) << "Pavadinimas"
@@ -90,6 +115,20 @@ void spausdintiLentele(ostream &out, string kategorijos[], string pavadinimai[],
             << right << setw(10) << kainos[i] << setw(8) << kiekiai[i]
             << setw(12) << suma << setw(11) << nuol << setw(12) << suma - nuol << "\n";
     }
+}
+
+void spausdintiVisoSumas(ostream &out, double kainos[], int kiekiai[], int n) {
+    double pries = visoSumaPries(kainos, kiekiai, n);
+    double nuol = visoNuolaidos(kainos, kiekiai, n);
+    out << "Suma pries nuolaidas: " << setw(10) << pries << " EUR\n";
+    out << "Nuolaidu suma:        " << setw(10) << nuol << " EUR\n";
+    out << "Moketina suma:        " << setw(10) << pries - nuol << " EUR\n";
+}
+
+void spausdintiKategorijuSumas(ostream &out, string kategorijos[], double kainos[], int kiekiai[], int n) {
+    for (int k = 0; k < KATEGORIJU_SK; k++)
+        out << left << setw(12) << KATEGORIJOS[k] << right << setw(10)
+            << kategorijosSuma(kategorijos, kainos, kiekiai, n, KATEGORIJOS[k]) << " EUR\n";
 }
 
 int ivestiSkaiciu(int nuo, int iki) {
@@ -137,9 +176,29 @@ int main() {
             case 1:
                 spausdintiLentele(cout, kategorijos, pavadinimai, kainos, kiekiai, n, "");
                 break;
-            case 2:
+            case 2: {
+                cout << "1. Dviraciai\n2. Dalys\n3. Aksesuarai\nPasirinkite kategorija: ";
+                string kategorija = KATEGORIJOS[ivestiSkaiciu(1, 3) - 1];
+                double suma = kategorijosSuma(kategorijos, kainos, kiekiai, n, kategorija);
+                bool yra = false;
+                for (int i = 0; i < n; i++)
+                    if (kategorijos[i] == kategorija)
+                        yra = true;
+                if (!yra) {
+                    cout << "Kategorijoje " << kategorija << " prekiu nera.\n";
+                    break;
+                }
+                cout << "\n";
+                spausdintiLentele(cout, kategorijos, pavadinimai, kainos, kiekiai, n, kategorija);
+                cout << "\n" << kategorija << " moketina suma: " << suma << " EUR\n";
+                break;
+            }
             case 3:
+                spausdintiVisoSumas(cout, kainos, kiekiai, n);
+                break;
             case 4:
+                spausdintiKategorijuSumas(cout, kategorijos, kainos, kiekiai, n);
+                break;
             case 5:
             case 6:
                 cout << "Si funkcija dar neparuosta.\n";
